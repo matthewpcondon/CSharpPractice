@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;	
+static void Main(String[] args)
+{
+	consoleStuff(args); // This returns all possible subsets of a collection of integers.
+}
+public void consoleStuff(string[] stringArgs)
+        {
+            // Create a dynamic collection of ints from the string input. Throw an exception if part of input is invalid.
+            List<int> intArgs = new List<int>();
+            try
+            {
+                for (int i = 0; i < stringArgs.Length; i++)
+                {
+                    intArgs.Add(Int32.Parse(stringArgs[i]));
+                }
+            }
+            catch (FormatException)
+            {
+                Console.Error.WriteLine("It appears that you entered something other than an integer. "+
+                "Please restart the program");
+                return;
+            }
+            // sum the whole thing.
+            // sum 1 through length -1, then length -2, ect through 1
+            // Iterate backwards from length to 2, then from length to 3, ect through length/
+            // Number of iterations should be (length times 2) - 1.
+            int[] intArray = intArgs.ToArray();
+            intArgs.Clear();
+            List<int>.Enumerator e;
+            int sum = 0;
+            for (int i = 1; i < Math.Pow(2,intArray.Length); i ++) // Because there are 2^length possible subsets
+            {
+                // Shift bits to the right until it equals zero.
+                // while doing that, keep track of how many times you've shifted it.
+                // if the bit after shifting is one, include the value from the set at the position equal to the
+                // current number of shifts. IE, if you've shifted to the right 5 times, include the index at
+                // length - 5.
+                Console.WriteLine("i is ... "+i);
+                for (int j = 0; j < intArray.Length ; j++) // get a subset
+                {
+                    
+                    if ((i >> j) % 2 == 1) // if it's odd, add the original index at j.
+                    {
+                        intArgs.Add(intArray[j]);
+                    }
+                }
+                // Print the sub-array. Mention it if the sub-array's elements sum to 0
+                e = intArgs.GetEnumerator();
+                // For some reason, enumerators start before the first element.
+                // Also, enumerators have to be created after each alteration of a collection.
+                while (e.MoveNext())
+                {
+                    Console.Write(e.Current);
+                    sum += e.Current;
+                }
+                if (sum == 0)
+                {
+                    Console.WriteLine("This subset sums to 0!");
+                }
+                else
+                { 
+                    Console.WriteLine();
+                }
+                // clear the list again so it can be reused for the next subarray.
+                intArgs.Clear();
+                sum = 0;
+            }
+        }

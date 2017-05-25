@@ -1,0 +1,49 @@
+public void consoleStuff()
+        { 
+           // Takes a rectangular array read from a pre-written, pre-named text file.
+// Assumes the numbers are separated by either spaces or tabs and arranged in a perfect rectangle.
+           // Finds the contiguous 3x3 sub-matrix with the highest sum.
+           FileStream fs = File.OpenRead("input.txt");
+           int width = 0, height = 0, sum = Int32.MinValue, row, col;
+           List<int> arr = new List<int>();
+           string[] lines;
+           using (StreamReader sr = new StreamReader(fs))
+           {
+               // read one line at a time. delimit the line by spaces.
+               while (!sr.EndOfStream)
+               {
+                    lines = sr.ReadLine().Split(' ', '\t');
+                    height++;
+                    width = lines.Length; // I couldn't find a way around assigning width the same value over and over again.
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        arr.Add(Int32.Parse(lines[i]));
+                    }
+               }
+           }
+           int[,] ints = new int[height, width];
+           int tempSum, answerRow = 0, answerCol = 0;
+           for (row = 0; row < height; row++)
+                for (col = 0; col < width; col++)
+                    ints[row,col] = arr[row*width + col];
+            for (row = 0; row < height-2; row++)
+            {
+                for (col = 0; col < width-2; col++)
+                {
+                    tempSum = ints[row, col] + ints[row,col+1] + ints[row,col+2] +
+                                ints[row+1, col] + ints[row+1,col+1] + ints[row+1,col+2] +
+                                ints[row+2, col] + ints[row+2,col+1] + ints[row+2,col+2];
+                    if (tempSum > sum)
+                    {
+                        sum = tempSum;
+                        answerRow = row;
+                        answerCol = col;
+                    }
+                }
+            }
+            Console.WriteLine(ints[answerRow,answerCol] + " " + ints[answerRow,answerCol+1] + " "+ints[answerRow,answerCol+2] +
+            "\n"+ints[answerRow+1,answerCol] + " " + ints[answerRow+1,answerCol+1] + " "+ints[answerRow+1,answerCol+2] +
+            "\n"+ints[answerRow+2,answerCol] + " " + ints[answerRow+2,answerCol+1] + " "+ints[answerRow+2,answerCol+2]);
+            Console.OutputEncoding = System.Text.Encoding.Unicode; // So I can print an 'up arrow'.
+            Console.WriteLine("\u2191 Here is the answer array.");
+        }

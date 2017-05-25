@@ -1,0 +1,92 @@
+public void consoleStuff(string[] strArgs)
+{	
+		// Prints square matrices to the console.
+            // Their dimension is read from the console.
+            // four matrices are printed:
+            // 1: top to bottom, columm by column from left to right always starting from top
+            // 2: top to bottom, bottom to top, top to bottom, so on...
+            // 3: diagonally from upper left to lower right
+            // 4: spiral, starting from upper left corner and counting down.
+            int rowCounter = 0, colCounter = 0, linearCounter = 0;
+            int dim = Int32.Parse(strArgs[0]); // dimensions
+            int[,] arr = new int[dim,dim];
+            for (rowCounter = 1; rowCounter <= dim; rowCounter++) // 1
+            {
+                for (colCounter = 0; colCounter < dim; colCounter++)
+                {
+                    Console.Write( ((colCounter*dim+rowCounter) + " ").PadRight(6) );
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("---");
+            for (rowCounter = 1; rowCounter <= dim; rowCounter++) // 2
+            {
+                for (colCounter = 0; colCounter < dim; colCounter++) /// loop for even-numbered columns
+                {
+                    if (colCounter % 2 == 0) // even
+                        Console.Write( ((dim*colCounter+rowCounter) + " ").PadRight(6));
+                    else // odd
+                        Console.Write( ((1+dim*(colCounter+1)-rowCounter) + " ").PadRight(6) );
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("---");
+            for (int n = 1; n < dim*2; n++) // 3
+            {
+                if (n <= dim)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        arr[dim-n+j,j] = ++linearCounter;
+                    }
+                }
+                else // last three groups
+                {
+                    for (int j = 0; j < dim*2 - n; j++)
+                    {
+                        arr[j,n-dim+j] = ++linearCounter;
+                    }
+                }
+            }
+            printSquareArray(arr, dim);
+            Console.WriteLine("---");
+            linearCounter = 0;
+            int maxRow = dim, maxCol = dim;
+            int minRow = 0, minCol = 0;
+            while (maxRow > minRow && maxCol > minCol)
+            {
+                for (rowCounter = minRow; rowCounter < maxRow; rowCounter++) // moving down
+                {
+                    arr[rowCounter, minCol] = ++linearCounter;
+                }
+                minCol++;
+                for (colCounter = minCol; colCounter < maxCol; colCounter++) // moving right
+                {
+                    arr[maxRow-1, colCounter] = ++linearCounter;
+                }
+                maxRow--;
+                for (rowCounter = maxRow-1; rowCounter >= minRow; rowCounter--) // moving up
+                {
+                    arr[rowCounter, maxCol-1] = ++linearCounter;
+                }
+                maxCol--;
+                for (colCounter = maxCol-1; colCounter >= minCol; colCounter--) // moving left
+                {
+                    arr[minRow, colCounter] = ++linearCounter;
+                }
+                minRow++;
+            }
+            printSquareArray(arr, dim);
+        }
+        private void printSquareArray(int[,] arr, int dim)
+        {
+            for (int row= 0; row < dim; row++) // 3
+            {
+                for (int col = 0; col < dim; col++)
+                {
+                    Console.Write( (arr[row,col]+" ").PadRight(6) );
+                    arr[row, col] = -1;
+                }
+                Console.WriteLine();
+            }
+        }

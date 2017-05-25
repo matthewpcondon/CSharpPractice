@@ -1,0 +1,17 @@
+public int getGCD(int value1, int value2)
+        {
+            // Implemenation of the Euclidean algorithm for gcd.
+            value1 = Math.Abs(value1);
+            value2 = Math.Abs(value2); // In case they are negative
+            while (value2 > 0 && value1 > 0)
+            {
+                if (value2 > value1)
+                {
+                    value2 = value2 % value1;
+                }
+                else {
+                    value1 = value1 % value2;
+                }
+            }
+            return value2 == 0 ? value1 : value2; // whichever one that isn't 0 is the answer.
+        }

@@ -1,0 +1,162 @@
+static void Main(string[] args)
+{
+	printWordsOfNumber(Int32.Parse(args[0]));
+}
+
+public void printWordsOfNumber(int input)
+        {
+            if (input > 999 || input < 0)
+            {
+                Console.WriteLine("The number is out of range. The range is 0 to 999");
+		return;
+            }
+            string word1, word2, word3, word4 = null;
+            
+            int ones = input % 10;
+            input /= 10;
+            int tens = input % 10;
+            input /= 10;
+            int hundreds = input % 10;
+            switch (hundreds)
+            {
+                case 0:
+                    word1 = null;
+                break;
+                case 1:
+                    word1 = "one hundred";
+                break;
+                case 2:
+                    word1 = "two hundred";
+                break;
+                case 3:
+                    word1 = "three hundred";
+                break;
+                case 4:
+                    word1 = "four hundred";
+                break;
+                case 5:
+                    word1 = "five hundred";
+                break;
+                case 6:
+                    word1 = "six hundred";
+                break;
+                case 7:
+                    word1 = "seven hundred";
+                break;
+                case 8:
+                    word1 = "eight hundred";
+                break;
+                case 9:
+                    word1 = "nine hundred";
+                break;
+                default:
+                    word1 = null;
+                break;
+            }
+            switch (tens)
+            {
+                case 0:
+                    word2 = null;
+                break;
+                case 1:
+                    word2 = null;
+                    word4 = "teen";
+                break;
+                case 2:
+                    word2 = " twenty";
+                break;
+                case 3:
+                    word2 = " thirty";
+                break;
+                case 4:
+                    word2 = " forty";
+                break;
+                case 5:
+                    word2 = " fifty";
+                break;
+                case 6:
+                    word2 = " sixty";
+                break;
+                case 7:
+                    word2 = " seventy";
+                break;
+                case 8:
+                    word2 = " eighty";
+                break;
+                case 9:
+                    word2 = " ninety";
+                break;
+                default:
+                    word2 = null;
+                break;
+            }
+            switch (ones)
+            {
+                case 0:
+                    if (word4 == "teen")
+                    {
+                        word3 = " ten";
+                        word4 = null;
+                    }
+                    else
+                    {
+                        word3 = null;
+                    }
+                break;
+                case 1:
+                    if (word4 == "teen")
+                    {
+                        word3 = " eleven";
+                        word4 = null;
+                    }
+                    else
+                    {
+                        word3 = "one";
+                    }
+                break;
+                case 2:
+                    if (word4 == "teen")
+                    {
+                        word3 = " twelve";
+                        word4 = null;
+                    }
+                    else
+                    {
+                        word3 = "two";
+                    }
+                break;
+                case 3:
+                    if (word4 == "teen")
+                    {
+                        word3 = " thirteen";
+                        word4 = null;
+                    }
+                    else
+                    {
+                        word3 = "three";
+                    }
+                break;
+                case 4:
+                    word3 = " four";
+                break;
+                case 5:
+                    word3 = " five";
+                break;
+                case 6:
+                    word3 = " six";
+                break;
+                case 7:
+                    word3 = " seven";
+                break;
+                case 8:
+                    word3 = " eight";
+                break;
+                case 9:
+                    word3 = " nine";
+                break;
+                default:
+                    word3 = null;
+                break;
+            }
+            Console.WriteLine(word1 + word2 + word3 + word4);
+        }

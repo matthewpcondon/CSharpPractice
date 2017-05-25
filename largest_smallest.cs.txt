@@ -1,0 +1,20 @@
+public void consoleStuff(string[] args)
+        {
+            // Initialize them to current members of args.
+            int smallest = Int32.Parse(args[0]), largest  = Int32.Parse(args[0]), temp = 0;
+            for (int i = 0; i < args.Length; i++)
+            {
+                temp = Int32.Parse(args[i]); // Store as temp variable so the parsing operation
+                // is not unnecessarily repeated.
+                if (temp < smallest )
+                {
+                    smallest = temp;
+                }
+                if (temp > largest )
+                {
+                    largest = temp;
+                }
+            }
+            Console.WriteLine("Here is the smallest: "+smallest);
+            Console.WriteLine("Here is the largest: "+largest);
+        }  

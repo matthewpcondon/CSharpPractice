@@ -1,0 +1,51 @@
+public void consoleStuff(string path)
+        {
+            // find all four-digit "lucky numbers" abcd such that a+b = c+d
+            // Write the winning digits to a file.
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            using (FileStream fs = File.Create(path)) // The 'using' keyword destroys the FileStream object when
+            // the program is done. It is defensive programming.
+            {
+                
+                 for (int a = 1; a < 10; a++)
+                {
+                    for (int b = 0; b < 10; b++)
+                    {
+                        for (int c = 0, d = 0; c < 10;)
+                        {
+                        
+                            if ((a+b) == (c+d))
+                            {
+
+                                AddText(fs, a+" + "+b+" = "+c+" + "+d+ " \ufefc" + "\n") ;
+                                
+                            }
+                            d++;
+                            if (d == 10)
+                            {
+                                d = 0;
+                                c++;
+                            }
+                        }
+                    }   
+                }
+
+            }
+           using (FileStream fs = File.OpenRead(path))
+           {
+               UTF8Encoding enc = new UTF8Encoding(true); // Makes sure chars can still be read as bytes.
+               byte[] bytes = new byte[1024]; // temporarily stores each group of bytes
+               while (fs.Read(bytes, 0, bytes.Length) > 0) // reads 1024 bytes at a time. Loop stops when 0 bytes are read.
+               {
+                    Console.WriteLine(enc.GetString(bytes)); // The encoder object gives the console the string it needs.
+               }
+           }
+        }
+        private static void AddText(FileStream fs, string input)
+        {
+            byte[] bytes = new UTF8Encoding(true).GetBytes(input);
+            fs.Write(bytes, 0, bytes.Length);
+        }

@@ -1,0 +1,53 @@
+public void consoleStuff(string path)
+        {
+           // Finds the maximal (longest, not highest value) sequence of increasing numbers.
+           if (!File.Exists(path))
+           {
+               throw new RaymondSaidSoException("Please create a text file with numbers in it"+
+               ", each separated by a return character.");
+           }
+           FileStream fs = File.OpenRead(path);
+           int[] arr = new int[30];
+           using (StreamReader sr = new StreamReader(fs))
+            {
+                int count = 0;
+                string value;
+                // Read numbers into array. Each number has to be separated by carriage return.
+                // No more than thirty numbers will be read.
+                while ((value = sr.ReadLine()) != null && count < 30) 
+                {
+                    arr[count] = Int32.Parse(value);
+                    Console.Write(arr[count]+" ");
+                    count++;
+                    if (count % 5 == 0)
+                    {
+                        Console.WriteLine();
+                    }
+                }
+            }
+           // assume that the first value is the winner.
+           // Keep checking previous entry, increment counter if it's the same.
+           // If the temp counter is longer than currLength, increment both of them and set start index at current position.
+           // If the current element is not a match, set tempCounter to 0.
+           int tempCounter = 0, currLength = 0, startIndex = 0;
+           for (int i = 1; i < 30; i++)
+           {
+                if ( arr[i] == (arr[i-1]+1) )
+                {
+                    tempCounter++;
+                    if (tempCounter > currLength)
+                    {
+                        currLength++;
+                        startIndex = i - tempCounter;
+                    }
+                     // remember where original start of repeat is.
+                }
+                else
+                { // Our repeating streak is done.
+                    tempCounter = 0;
+                }
+                    
+           }
+           Console.WriteLine("Here is the incrementing character: "+arr[startIndex]+
+           "\nHere is the index: "+startIndex);
+        }

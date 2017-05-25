@@ -1,0 +1,15 @@
+public int getNthFibonacci(int input)
+        {
+            if (input == 0 || input == 1)
+            {
+                return input;
+            }
+            int result = 0, fibMinus1 = 1, fibMinus2 = 0;
+            for (int i = 2; i <= input; i++)
+            {
+                result = fibMinus1 + fibMinus2; // get the fib number, then add it to the result.
+                fibMinus2 = fibMinus1; // n-2 would be given n-1's value
+                fibMinus1 = result; // n-1 gets the current fib number's value.
+            }
+            return result;
+        }

@@ -1,0 +1,38 @@
+public void consoleStuff(string[] strArgs)
+        { 
+            // Finds contiguous subsequence of numbers with maximal sum.
+            // C# Implementation of Kadane's algorithm
+            /*
+            Modify Kadane's algorithm to remember the subarray's starting and ending indices.
+             */
+             List<int> ints = new List<int>();
+             for (int i = 0; i < strArgs.Length; i++)
+             {
+                 ints.Add(Int32.Parse(strArgs[i]));
+             }
+             ints.ToArray();
+             int max_ending_here = ints[0], max_so_far = ints[0];
+             int frontIndex = 0;
+             for (int i = 1; i < ints.Count; i++)
+             {
+                max_ending_here = Math.Max(ints[i], max_ending_here + ints[i]);
+                if (max_ending_here > max_so_far)
+                {
+                    frontIndex = i;
+                    max_so_far = max_ending_here;
+                }
+             }
+             Console.WriteLine("Here is the value of that subsequence's sum: "+max_so_far);
+             List<int> answers = new List<int>();
+             int counterValue = 0; // For remebering how far to backtrack.
+             for (int i = frontIndex; counterValue != max_so_far ; i--)
+             {
+                 answers.Add(ints[i]);
+                 counterValue += ints[i];
+             }
+             answers.Reverse();
+             foreach (int value in answers)
+             {
+                 Console.WriteLine(value);
+             }
+        }

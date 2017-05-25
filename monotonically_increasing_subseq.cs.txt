@@ -1,0 +1,108 @@
+public void printMonIncSubSeq(string path)
+        { // Only for length = 30. I spent too much time on it, and had to move on to other .NET projects,
+        // so I didn't bother with variable-sized input.
+           // Finds the maximal (longest, not highest value) sequence of increasing numbers.
+           if (!File.Exists(path))
+           {
+               throw new Exception("Please create a text file with numbers in it"+
+               ", each separated by a return character.");
+           }
+           FileStream fs = File.OpenRead(path);
+           int[] arr = new int[30];
+           using (StreamReader sr = new StreamReader(fs))
+            {
+                string value;
+                int count = 0;
+                // Read numbers into array. Each number has to be separated by carriage return.
+                // No more than thirty numbers will be read.
+                while ((value = sr.ReadLine()) != null) 
+                {
+                    arr[count] = Int32.Parse(value);
+                    Console.Write(arr[count]+" ");
+                    count++;
+                    if (count % 5 == 0)
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                Console.WriteLine();
+            }
+            // Venki's algorithm from Geeksforgeeks.org
+           // keep several lists, updating them as needed, they're sorted in ascending order.
+           // Case 1:
+           // if the current element is smaller than smallest of all lists, start a new list beginning with that one.
+           // Case 2:
+           // if the current element is larger than the highest of all lists, copy largest list and add current to it.
+           /*
+           Case 3:
+           If A[i] is in between, we will find a list with   largest end element that is smaller than A[i]. 
+            Clone and extend this list by A[i]. We will discard all
+            other lists of same length as that of this modified list.
+            */
+           int[] pIndices = new int[30]; // remembers the second-longest (end elements second-highest) active list. 
+           int[] tIndices = new int[30]; // holds all of the end elements of the sub arrays.
+           //List<int> tIndices = new List<int>();
+           //List<int> pIndices = new List<int>();
+           for (int j = 0; j < 30; j++)
+           {
+               pIndices[j] = -1;
+               tIndices[j] = 0;
+               Console.Write("J is: "+j+" "+tIndices[j] + " " + pIndices[j]+"\n");// concatenation of strings, not addition
+           }
+           
+            int counter = 1;
+            for (int x = 1; x < 30; x++)
+            {
+                Console.WriteLine("Current value of X: " + x);
+                // case 1: it is lower than end elements in any list. increment counter. Shift every element to the right.
+                if (arr[x] < arr[tIndices[0]])
+                {
+                    tIndices[0] = x;
+                }
+                // case 2: It is higher then end elements of any list. increment counter.
+                else if (arr[x] > arr[tIndices[counter-1]])
+                {
+                    pIndices[x] = tIndices[counter-1];
+                    tIndices[counter++] = x;
+                }
+                // case 3: It is in between. Find lowest end-element higher than arr[x], then replace it.
+                else
+                {
+                    // locates arr[x] in tailIndices.
+                    int tempPos = getCeilIndex(arr, tIndices, -1,
+                                counter-1, arr[x]);
+                    if (tempPos > 0) // rigged it because of out of bounds exceptions. Venki used smart pointers, I didn't.
+                    {
+                        pIndices[x] = tIndices[tempPos-1];
+                    }
+                    tIndices[tempPos] = x; // effectively replaces an active list.
+                }
+            }
+           // store the answer in reverse order
+           int printCounter = 0; // To help print the elements in ascending order.
+           int[] answers = new int[30];
+           for (int index = tIndices[counter-1]; index >=0; index = pIndices[index])
+           {
+               answers[printCounter++] = arr[index];
+           }
+           while ( printCounter > 0)
+           {
+               Console.Write(answers[--printCounter]+ " ");
+           }
+           Console.WriteLine(); // For neat organization.
+        }
+        private int getCeilIndex(int[] arr, int[] tIndices, int left, int right, int findMe)
+        {
+            // Venki's implementation of binary search.
+            // It returns the location in the tail indices of "findMe".
+            // I renamed the variables to improve readability.
+            while (right - left > 1)
+            {
+                int middle = left + (right - left)/2;
+                if (arr[tIndices[middle]] >= findMe)
+                    right = middle;
+                else
+                    left = middle;
+            }
+            return right;
+        }

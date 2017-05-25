@@ -1,0 +1,68 @@
+using System;
+class Spiral{
+    static void Main(string[] args)
+    {
+        int[,] intArr = new int[3,5];
+        Array array = Array.CreateInstance(typeof(int),3,5);
+        int count = 1;
+        for (int i = array.GetLowerBound(0); i <= array.GetUpperBound(0); i++)
+        {
+            
+            for (int j = array.GetLowerBound(1); j <= array.GetUpperBound(1); j++)
+            {
+                array.SetValue(i+j, i, j);
+                intArr[i,j] = count++;
+                //Console.Write(array.GetValue(i,j) + " ");
+                
+                Console.Write(intArr[i,j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("The array has {0} dimensions.", array.Rank);
+       spiralOrder(3,5, intArr);
+    }
+    private static void spiralOrder(int m, int n, int[,] matrix)
+{
+    // 'm' is number of rows
+    // 'n' is number of columns.
+     if(matrix.Length == 0)
+         return;
+     int k = 0, l = 0,  i;
+     // k is starting row index
+     // m is ending row index
+     // l is starting column index
+     // n is ending column index
+     // i is an iterator.
+
+     while(k < m && l < n)
+     {
+         // print top row.
+        for (i = l; i < n; ++i)
+            Console.Write(matrix[k,i] + " ");
+        k++; // delete top row.
+
+         // print right column.
+        for (i = k; i < m; ++i)
+            Console.Write(matrix[i,n-1] + " ");
+        n--; // Delete right column.
+        if (k < m)
+        {
+            // print bottom row.
+            for (i = n-1; i >= l; --i)
+                Console.Write(matrix[m-1,i] + " ");
+            m--; // delete bottom row
+        }
+         
+        if (l < n) // This is in case the array is not a perfect square.
+		// It prevents backtracking.
+        {
+            // print left side.
+            for (i = m-1; i >= k; --i)
+                Console.Write(matrix[i,l] + " ");
+            l++; // delete left side
+        }
+        
+     }
+     Console.WriteLine();
+ } 
+}
