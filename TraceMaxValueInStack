@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+class Solution {
+
+    static void Main(string[] args) {
+        Stack<int> s = new Stack<int>();
+        int n = Convert.ToInt32(Console.ReadLine());
+        int q;
+        // It's too inefficient when I organize each line of input into a 1-d array.
+        // So I'm trying putting all of the input into a jaggged 2-d array.
+        string[][] queries = new string[100001][];
+        for (int i = 0; i < n; i++)
+        {
+            queries[i] = Console.ReadLine().Split(' ');
+        }
+        for (int i = 0; i < n; i++)
+        {
+            switch(queries[i][0])
+            {
+            case "1" :
+			// This is more efficient, because parsing is only taking place when a value is
+			// is being pushed.
+                int val = int.Parse(queries[i][1]);
+                if (s.Count != 0)
+                {
+				// only push a value onto the stack if it's higher than what's at the top.
+				// we ignore the values that are lower.
+                    val = val > s.Peek() ? val : s.Peek();
+                }
+                s.Push(val);
+            break;
+            case "2" :
+                s.Pop();
+            break;
+            case "3" :
+                Console.WriteLine(s.Peek());
+            break;
+            }   
+        }
+        
+    }
+}
