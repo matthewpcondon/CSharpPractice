@@ -1,0 +1,115 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class Solution {
+    static int GetSumOfDigits(int n)
+    {
+        // assuming base-10 numbers
+        /*
+        1048
+        104
+        10
+        1
+        */
+        int sum = 0;
+        while (n / 10 > 0)
+        {
+            sum += n % 10;
+            n /= 10;
+        }
+        if (n > 0)
+            sum += n % 10;
+        return sum;
+    }
+    static int[] SieveOfEratosthenes(int n)
+    {
+    
+        // limited to a max value of 10e7
+        // Uses of the Sieve of Eratosthenes algorithm
+        // It marks all values that are a multiple of two or greater.
+        n /= 2;
+        int[] arr = new int[n];
+        arr[0] = 1;
+        arr[1] = 1;
+        int count = 1, increment = 1;
+        while (increment < n)
+        {
+            count = ++increment;
+            while ((count += increment) < n)
+            {
+                arr[count] = 1;
+            }
+        }
+        int[] ans = new int[n];
+        int pos = -1;
+        for (int i = 0; i < n; i++)
+        {
+            if (arr[i] == 0) // we found a prime!
+            {
+                pos++;
+                ans[pos] = i;
+            }
+        }
+        return ans;
+    }
+    // Complete the solve function below.
+    static int solve(int n) {
+        // return 0 or 1
+        // generate prime numbers up to 1e6
+        if (n < 4)
+            return 0;
+        int[] primes = SieveOfEratosthenes(n);
+        // divide n by successive primes (2, then 3, then 5, etc) until the
+        // quotient is 1. Remember to divide again by same value until no longer
+        // evenly divisible. EG:
+        /*
+        121 % 2 != 0
+        121 % 3 != 0
+        121 % 5 != 0
+        121 % 7 != 0
+        121 % *11* == 0 , 121 / 11 == 11
+        11 % *11* == 0 , 11 / 11 == 1
+        So this is two prime factors: 11 and 11. We made sure to keep dividing by 11
+        until 1 or indivisible
+        
+        remember each prime factor that evenly divides as a list.
+        */
+        List<int> PrimeFactors = new List<int>();
+        int quotient = n;
+        int primeItr = 0;
+        while (quotient != 1 && primes[primeItr] != 0)
+        {
+            if ( (quotient % primes[primeItr]) == 0) // we've found a prime factor!
+            {
+                quotient = quotient / primes[primeItr];
+                PrimeFactors.Add(primes[primeItr]);
+            }
+            else
+            {
+                primeItr++;
+            }
+        }
+        //Now that we have the prime factors, we sum their digits.
+        int primeFactorsSum = 0;
+        foreach(int i in PrimeFactors)
+        {
+            primeFactorsSum += GetSumOfDigits(i);
+        }
+        return (primeFactorsSum == GetSumOfDigits(n)) ? 1 : 0;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine());
+
+        int result = solve(n);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
