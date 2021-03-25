@@ -1,0 +1,64 @@
+using System;
+
+public class Perm{
+    static bool IsIncluded(int[] ans, int check)
+    {
+        foreach(int i in ans)
+        {
+            if (check == i)
+                return true;
+        }
+        return false;
+    }
+    static void PrintArray(int[] ans)
+    {
+        foreach (int i in ans)
+        {
+            Console.Write(i + " ");
+        }
+        Console.WriteLine();
+    }
+    static void Permutation(int[] orig, int[] ans, int n, int lvl)
+    {
+        // prints out each possible permutation of the orig. array
+        // lvl ranges from 0 to n
+        // no more recursive calls once lvl reaches n
+      lvl++;
+      if (lvl == n)
+      {
+          PrintArray(ans);
+          //Console.WriteLine("Clearing answer at index: {0}", lvl-1);
+          ans[lvl - 1] = 0;
+      }
+      else
+      {
+          for (int i = 0; i < n; i++)
+          {
+              if (!IsIncluded(ans, orig[i]))
+              {
+                  ans[lvl] = orig[i];
+                  Permutation(orig, ans, n, lvl);
+              }
+
+          }
+          //Console.WriteLine("Clearing answer at index: {0}", lvl-1);
+          // annoying corner case to prevent IOB at end of recursion.
+          if (lvl != 0) 
+          {
+              ans[lvl-1] = 0;
+          }
+      }
+		
+    }
+	static public void Main (){
+		// The idea is to maintain an array with the current permutation
+		// maintain a variable called "level" which defines each permutation
+		// Print out the results when level == n
+		// increment "level" when a new call is made to Permutation()
+		
+		// algo requires that there be no duplicates in the array.
+		int[] orig = {1, 2, 3, 4};
+		int[] ans = new int[4];
+		Permutation(orig, ans, 4, -1);
+	}
+}
