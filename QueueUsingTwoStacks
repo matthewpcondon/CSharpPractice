@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+class Solution {
+    static void Main(String[] args) {
+        int q = int.Parse(Console.ReadLine());
+        // to store the answers, because printing out the answers as the program
+        // executes has caused timeout errors in previous exercises
+        List<int> ans = new List<int>();
+        Stack<int> s1 = new Stack<int>();
+        Stack<int> s2 = new Stack<int>();
+        string[] op = new string[2];
+        /*
+        enqueue operation:
+        push onto s1
+        dequeue operation:
+        if s2 is empty, 
+            push everything from s1 onto s2
+            pop from s2
+        else
+            pop from s2
+        */
+        while (q > 0){
+            op = Console.ReadLine().Split(' ');
+            switch (op[0]){
+                case "1":
+                    // enqueue
+                    s1.Push(int.Parse(op[1]));
+                break;
+                case "2":
+                    // dequeue
+                    if (s2.Count == 0){
+                        while (s1.Count > 0){
+                            s2.Push(s1.Pop());
+                        }
+                    }
+                    s2.Pop();
+                break;
+                case "3":
+                    // peek front of queue
+                    if (s2.Count == 0){
+                        while (s1.Count > 0){
+                            s2.Push(s1.Pop());
+                        }
+                    }
+                    ans.Add(s2.Peek());
+                break;
+            }
+            q--;
+        }
+        foreach (int i in ans){
+            Console.WriteLine(i);
+        }
+    }
+}
