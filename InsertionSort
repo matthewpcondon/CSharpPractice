@@ -1,0 +1,46 @@
+static void Insert(int[] ans, int insert, int insertIndex, int i)
+        {
+            while (i > insertIndex)
+            {
+                ans[i] = ans[i-1];
+                i--;
+            }
+            ans[insertIndex] = insert;
+        }
+        static void InsertionSort(int[] arr)
+        {
+            // It would be more efficient if we returned an answer array rather than copied into the original
+            // int[] a = { 45, 4, -3, 4, 10, -4, 7 };
+            /*45 0 0 0 0 0 0
+             * 4 45 0 0 0 0 0
+             * -3 4 45 0 0 0 0
+             * -3 4 4 45 0 0 0 
+             * -3 4 4 10 45 0 0
+             * -4 -3 4 4 10 45 0
+             * */
+            int[] ans = new int[arr.Length];
+            ans[0] = arr[0];
+            int insert, j, insertIndex;
+            for (int i = 1; i < arr.Length; i++)
+            {
+                insert = arr[i];
+                // insert is the value we're looking to relocate
+                j = i - 1;
+                insertIndex = j;
+                // insertIndex is where we want to place our value
+                while (j >= 0 && ans[j] > insert)
+                {
+                    if (ans[j] > insert)
+                    {
+                        insertIndex = j;
+                    }
+                    j--;
+                }
+                Insert(ans, insert, insertIndex, i);
+            }
+            int ansItr = 0;
+            foreach( int ans_element in ans)
+            {
+                arr[ansItr++] = ans_element;
+            }
+        }
