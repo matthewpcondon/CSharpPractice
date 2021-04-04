@@ -1,0 +1,46 @@
+static void Swap (ref int a, ref int b)
+{
+    a ^= b;
+    b ^= a;
+    a ^= b;
+}
+static void ShellSort(int[] arr)
+{
+    int n = arr.Length;
+    int gap = n / 2;
+    int end, endBacktrack;
+    while (gap > 0)
+    {
+        // end is the later index that we are swapping
+        // end-gap is the earlier index
+        end = endBacktrack = gap;
+        while (end < n)
+        {
+            if (arr[end] < arr[end - gap])
+            {
+                Swap(ref arr[end], ref arr[end - gap]);
+                endBacktrack = end-1;
+                // if there was a swap, we go back to previous pairs.
+                while (endBacktrack - gap >= 0
+                    && arr[endBacktrack] < arr[endBacktrack - gap])
+                { // 'endbacktrack' is the later index for swaps when
+                  // moving backward in array
+                    Swap(ref arr[endBacktrack], ref arr[endBacktrack - gap]);
+
+                    endBacktrack--;
+                }
+            }
+            if (end == n-1 && n % 2 == 1 && gap == n/2)// corner case where we're at the end of the first pass
+            { // in an odd-numbered array
+                int middleEnd  = end - gap;
+                if (arr[middleEnd] < arr[middleEnd - gap])
+                {
+                    Swap(ref arr[middleEnd], ref arr[middleEnd - gap]);
+                }
+            }
+            end++;
+        }
+
+        gap /= 2;
+    }
+}
