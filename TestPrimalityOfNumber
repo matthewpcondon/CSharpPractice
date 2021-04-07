@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+class Solution {
+    static void Main(String[] args) {
+        /* for all i up to sqrt(n)
+        if n % i == 0,
+        stop the loop, as we've discovered that n is not prime.
+         */
+        int t = int.Parse(Console.ReadLine());
+        int i, n;
+        while (t-- > 0){
+            n = int.Parse(Console.ReadLine());
+            if (n == 1){
+                Console.WriteLine("Not prime");
+                continue;
+            }
+            else if (n == 2 || n == 3){
+                Console.WriteLine("Prime");
+                continue;
+            }
+            for (i = 2; ( i <= Math.Sqrt((double) n) ) && (n % i != 0); i++){
+                
+            }
+            if (n % i == 0) {// we've found an i that evenly divides n
+                Console.WriteLine("Not prime");
+            }
+            else { // i got past the square root without finding a divisor.
+                Console.WriteLine("Prime");
+            }
+        }
+    }
+}
