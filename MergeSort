@@ -1,0 +1,50 @@
+static void MergeSort(int[] arr, int beg, int end) {
+            if (beg < end) {
+                int middle = beg + (end-beg)/2;
+                MergeSort(arr, beg, middle);
+                MergeSort(arr, middle+1, end);
+
+                Merge(arr, beg, middle, middle+1, end);
+            }
+            
+        }
+        static void Merge(int[] arr, int beg, int midlow, int midhigh, int end) {
+            int[] newvalues = new int[end - beg + 1];
+            for (int i = beg, j = midhigh, k = 0; k <= (end-beg); k++) {
+                // empty the rest of one half into newvalues if one of the
+                // indices has gone out of bounds
+                if (j > end) {
+                    newvalues[k] = arr[i];
+                    i++;
+                }
+                else if (i > midlow) {
+                    newvalues[k] = arr[j];
+                    j++;
+                }
+                else {
+                // the two halves are already sorted, so compare their current lowest values
+                // and place the lower of them into newvalues[]
+                // "i" iterates the first half, "j" iterates the second half
+                    if (arr[i] <= arr[j]) {
+                        newvalues[k] = arr[i];
+                        i++;
+                    }
+                    else if (arr[i] > arr[j]) {
+                        newvalues[k] = arr[j];
+                        j++;
+                    }
+                }
+                
+            }
+            // we're done analyzing the two halves, so replace the values in the
+            // original array with the values from newvalues[]
+            for (int i = beg, k = 0; i <= end; i++, k++) {
+                arr[i] = newvalues[k];
+            }
+        }
+        static void PrintArr <A> (A[] arr) {
+            foreach (A i in arr) {
+                Console.Write(i + " ");
+            }
+            Console.WriteLine();
+        }
