@@ -1,0 +1,56 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Collections;
+
+namespace PracticeWithC_Sharp
+{
+    class Program
+    {
+        static async void DoSomethingAsynchronously() {
+            Console.WriteLine("Starting the async method.");
+            await wait();
+            Console.WriteLine("We're done waiting on wait(). What was he doing, " +
+                "sleeping on the job?!");
+        }
+        static private Task wait() {
+            return Task.Factory.StartNew(() => { 
+                DateTime now = DateTime.Now;
+                Random r = new Random(now.Second);
+                Thread.Sleep(3000);
+                Console.WriteLine("Now that we're done sleeping with that poor\n" +
+                    "calling method waiting on us, let's print a random value! " +
+                    r.Next(1, 101));
+            });
+            
+        }
+        static void DoSomethingSynchronously() {
+            Console.WriteLine("Starting the async method.");
+            wait();
+            Console.WriteLine("We're continuing, before wait() has finished.");
+        }
+        static private void WaitSync() {
+            DateTime now = DateTime.Now;
+            Random r = new Random(now.Second);
+            Thread.Sleep(3000);
+            Console.WriteLine("Let's print a random value: {0}.\nHey, the main method finished without me!" +
+                r.Next(1, 101));
+
+        }
+        static void Main(string[] args) {
+            DoSomethingSynchronously();
+            // when you call 'dosomethingsynchronously', the method continues
+            // without waiting for the waitSync() method.
+            // so since there's a delay in wait(), we actually finish the main()
+            // method before we finish with wait.
+            DoSomethingAsynchronously();
+            /*When you call "DoSomethingAsynchronously', the method does not
+             * finish until wait() is finished.
+             * So this time, the main method finishes last, like the nice guy.
+             * */
+            Console.WriteLine("Press any key to end the session.");
+            Console.ReadKey();
+        }
+    }
+}
