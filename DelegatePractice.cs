@@ -14,9 +14,9 @@ class delPractice{
         switch (n)
         {
             case 1:
-                return "Get girls?\nYou clean your face up, exercise and get a good job.";
+                return "Fix a car? Don't bother, you suck at it.";
             case 2: 
-                return "Get a job? You find what you like doing, get good at it and then brag to employers.";
+                return "Socialize a rabbit? I don't know, can you spare an hour a day?";
             default:
                 Console.WriteLine("You have to enter a one or a two.");
                 return null;
