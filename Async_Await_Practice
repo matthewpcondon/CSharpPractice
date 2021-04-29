@@ -8,43 +8,56 @@ namespace PracticeWithC_Sharp
 {
     class Program
     {
+        private delegate void SelectFunction();
         static async void DoSomethingAsynchronously() {
             Console.WriteLine("Starting the async method.");
-            await wait();
-            Console.WriteLine("We're done waiting on wait(). What was he doing, " +
-                "sleeping on the job?!");
+            await waitASync(); // places wait() on a stack while this method continues
         }
-        static private Task wait() {
-            return Task.Factory.StartNew(() => { 
+        static private Task waitASync() {
+            return Task.Factory.StartNew(() => {
                 DateTime now = DateTime.Now;
                 Random r = new Random(now.Second);
                 Thread.Sleep(3000);
-                Console.WriteLine("Now that we're done sleeping with that poor\n" +
-                    "calling method waiting on us, let's print a random value! " +
-                    r.Next(1, 101));
+                Console.WriteLine("Wait method: Let's print a random value: {0}.\n" +
+                    "Hey, the main method finished without me!",
+                r.Next(1, 101));
             });
-            
+
         }
         static void DoSomethingSynchronously() {
-            Console.WriteLine("Starting the async method.");
-            wait();
-            Console.WriteLine("We're continuing, before wait() has finished.");
+            Console.WriteLine("Starting the sync method.");
+            WaitSync();
+            Console.WriteLine("DoSomething method: We're finally done waiting on wait(). " +
+                "What was he doing, sleeping on the job?!");
         }
         static private void WaitSync() {
             DateTime now = DateTime.Now;
             Random r = new Random(now.Second);
             Thread.Sleep(3000);
-            Console.WriteLine("Let's print a random value: {0}.\nHey, the main method finished without me!" +
-                r.Next(1, 101));
-
+            Console.WriteLine("Now that we're done sleeping with that poor\n" +
+                    "calling method waiting on us, let's print a random value! " +
+                    r.Next(1, 101));
         }
         static void Main(string[] args) {
-            DoSomethingSynchronously();
-            // when you call 'dosomethingsynchronously', the method continues
-            // without waiting for the waitSync() method.
-            // so since there's a delay in wait(), we actually finish the main()
-            // method before we finish with wait.
-            DoSomethingAsynchronously();
+            Console.WriteLine("Press 1 to see an asynchronous example, " +
+                "press any other integer to see synchronous.");
+            int choice;
+            // I realize that the use of a delegate is unnecessary, but I wanted to practice with delegates.
+            // the point of this repository, after all, is to practice with C#...
+            SelectFunction sf;
+            if (int.TryParse(Console.ReadLine(), out choice)) {
+                if (choice == 1) {
+                    sf = new SelectFunction(DoSomethingAsynchronously);
+                    sf();
+                }
+                else {
+                    sf = new SelectFunction(DoSomethingSynchronously);
+                    sf();
+                }
+            }
+            else {
+                Console.WriteLine("Please use correct input next time.");
+            }
             /*When you call "DoSomethingAsynchronously', the method does not
              * finish until wait() is finished.
              * So this time, the main method finishes last, like the nice guy.
